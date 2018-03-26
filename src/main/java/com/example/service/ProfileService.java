@@ -31,4 +31,16 @@ public class ProfileService {
 		return profileRepository.findAll();
 	}
 
+    public int save(Profile profile) {
+	    profileRepository.save(profile);
+	    return profile.getId();
+    }
+
+    public Profile findById(int id) {
+	    return profileRepository.findOne(id);
+    }
+
+    public void updateProfile(int id, Profile profile) {
+	    profileRepository.save(profile);
+    }
 }
