@@ -19,7 +19,6 @@ var ProfileModel = mongoose.model('Profile');
 //     }).catch(next);
 // });
 
-
 router.get('/profile', function(req, res, next){
     console.log("Profile GET");
     Profile.find().then(function(profile){
@@ -28,7 +27,6 @@ router.get('/profile', function(req, res, next){
         return res.json(profile);
     }).catch(next);
 });
-
 
 router.get('/profile/renter', function(req, res, next){
     Profile.find({isLandlord: false}).then(function(profile){
@@ -66,7 +64,6 @@ router.get("/profile/:id", function (req, res, next) {
     }
 });
 
-
 router.post('/profile', function(req, res, next){
     var profile = new ProfileModel(req.body);
 
@@ -91,6 +88,7 @@ router.put('/profile/:id', function(req, res, next){
         studentenVereniging: req.body.studentenVereniging,
         educationLevel: req.body.educationLevel
     };
+
     Profile.update({_id: req.params.id}, prof, function(err, raw) {
         if (err) {
             res.send(err);
