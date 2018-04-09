@@ -7,7 +7,7 @@ import java.util.Date;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class Profile {
+public class Profile {
 
 	@Id
 	@GeneratedValue
