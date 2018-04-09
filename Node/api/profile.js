@@ -31,7 +31,7 @@ router.get('/profile', function(req, res, next){
 
 
 router.get('/profile/renter', function(req, res, next){
-    Profile.find({isLandlord: true}).then(function(profile){
+    Profile.find({isLandlord: false}).then(function(profile){
         if(!profile){ return res.send("Nothing"); }
         return res.json(profile);
     }).catch(next);
