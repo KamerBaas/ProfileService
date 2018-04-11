@@ -85,8 +85,6 @@ router.post('/profile', function(req, res, next){
 
         return res.json({saved: true});
     }).catch(next);
-
-
 });
 
 router.put('/profile/:id', function(req, res, next){
