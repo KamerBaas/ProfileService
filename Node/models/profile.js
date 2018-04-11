@@ -33,23 +33,27 @@ const ProfileSchema = new Schema({
  * Methods
  */
 
-// ProfileSchema.methods = {
-//     toJSONFor: function (profile) {
-//         return {
-//             slug: this.slug,
-//             title: this.title,
-//             description: this.description,
-//             body: this.body,
-//             createdAt: this.createdAt,
-//             updatedAt: this.updatedAt,
-//             tagList: this.tagList,
-//             favorited: profile ? profile.isFavorite(this._id) : false,
-//             favoritesCount: this.favoritesCount,
-//             author: this.author.toProfileJSONFor(profile)
-//         }
-//     }
-//
-// };
+ProfileSchema.methods = {
+    toJSONFor: function (profile) {
+        return {
+            objectID: profile._id,
+            isLandlord: profile.isLandlord,
+            name: profile.name,
+            title: profile.title,
+            description: profile.description,
+            gender: profile.gender,
+            dateOfBirth: profile.dateOfBirth,
+            spokenLanguages: profile.spokenLanguages,
+            livesInCountry: profile.livesInCountry,
+            residence: profile.residence,
+            status: profile.status,
+            smokeInHouse: profile.smokeInHouse,
+            studentenVereniging: profile.studentenVereniging,
+            educationLevel: profile.educationLevel
+        }
+    }
+
+};
 
 var Profile = mongoose.model('Profile', ProfileSchema);
 

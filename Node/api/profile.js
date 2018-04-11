@@ -1,5 +1,7 @@
 var router = require('express').Router();
 var mongoose = require('mongoose');
+var request = require('request');
+
 var Profile = require('../models/profile').Profile;
 var ProfileModel = mongoose.model('Profile');
 
@@ -21,6 +23,7 @@ var ProfileModel = mongoose.model('Profile');
 
 router.get('/profile', function(req, res, next){
     console.log("Profile GET");
+
     Profile.find().then(function(profile){
         if(!profile){ return res.send("Nothing"); }
 
@@ -67,33 +70,57 @@ router.get("/profile/:id", function (req, res, next) {
 router.post('/profile', function(req, res, next){
     var profile = new ProfileModel(req.body);
 
-    profile.save().then(function(){
+    profile.save().then(function(prof){
+
+        var profi = req.body;
+        profi.objectID = prof._id;
+
+        console.log(profi);
+        //console.log({profile :profi});
+
+        request.post({ url: 'http://gateway.kamerbaas.nl/profile/', json: {profile: profi}}, function optionalCallback(err, httpResponse, body) {
+            if (err) { return console.error('upload failed:', err);}
+            console.log('Upload successful!  Server responded with:', body);
+        });
+
         return res.json({saved: true});
     }).catch(next);
+
+
 });
 
 router.put('/profile/:id', function(req, res, next){
-    const prof = {
-        name: req.body.name,
-        isLandlord: req.body.isLandlord,
-        title: req.body.title,
-        description: req.body.description,
-        gender: req.body.gender,
-        dateOfBirth: req.body.date,
-        spokenLanguages: req.body.spokenLanguages,
-        livesInCountry: req.body.livesInCountry,
-        residence: req.body.residence,
-        status: req.body.status,
-        smokeInHouse: req.body.smokeInHouse,
-        studentenVereniging: req.body.studentenVereniging,
-        educationLevel: req.body.educationLevel
-    };
 
-    Profile.update({_id: req.params.id}, prof, function(err, raw) {
+    Profile.findByIdAndUpdate({_id: req.params.id}, req.body, {new: true},  function(err, prof) {
         if (err) {
-            res.send(err);
+            res.json(err);
         }
-        res.send(raw);
+
+        var profi = req.body;
+        profi.objectID = prof._id;
+
+        request.post({ url: 'http://gateway.kamerbaas.nl/profile/', json: {profile: profi}}, function optionalCallback(err, httpResponse, body) {
+            if (err) { return console.error('upload failed:', err);}
+            console.log('Upload successful!  Server responded with:', body);
+        });
+        res.json(prof);
+    });
+});
+
+
+router.delete('/profile/:id', function(req, res, next){
+    Profile.findByIdAndRemove({_id: req.params.id}, function(err, raw) {
+        if (err) {
+            res.json(err);
+        }
+
+        var prof = {};
+        prof.objectID = req.params.id;
+        request.delete({ url: 'http://gateway.kamerbaas.nl/profile/', json: {profile: prof}}, function optionalCallback(err, httpResponse, body) {
+            if (err) { return console.error('upload failed:', err);}
+            console.log('Upload successful!  Server responded with:', body);
+        });
+        res.json({removed: true});
     });
 });
 
