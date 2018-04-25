@@ -1,3 +1,5 @@
+require('@google-cloud/trace-agent').start();
+
 var express = require('express');
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');

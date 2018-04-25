@@ -13,12 +13,14 @@
   "author": "Nils Groen",
   "license": "ISC",
   "dependencies": {
+    "@google-cloud/trace-agent": "^2.7.2",
     "body-parser": "^1.18.2",
-    "request": "^2.85.0",
     "cors": "^2.8.4",
     "express": "^4.16.3",
     "faker": "^4.1.0",
     "mongoose": "^5.0.12",
-    "nodemon": "^1.17.2"
+    "nodemon": "^1.17.2",
+    "request": "^2.85.0",
+    "winston": "^2.4.2"
   }
 }
