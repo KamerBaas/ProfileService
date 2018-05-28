@@ -53,6 +53,22 @@ router.get('/profile/location/:location', function(req, res, next){
 });
 
 router.get("/profile/:id", function (req, res, next) {
+
+    if(req.params.idtoken === req.params.id) { //User visiting his own profile
+        //TODO: Send idtoken to auth service
+        if(true/*returned answer of auth == true*/) {
+            return getProfile(req, res);
+        }
+        else {
+            res.sendStatus(401);
+        }
+    }
+
+    return getProfile(req, res);
+    
+});
+
+function getProfile(req, res) {
     if (req.params.id) {
         Profile.findById(req.params.id).then(function (profile) {
             if (!profile) {
@@ -65,7 +81,22 @@ router.get("/profile/:id", function (req, res, next) {
     } else {
         return res.sendStatus(404);
     }
-});
+}
+
+// router.get("/profile/:id", function (req, res, next) {
+//     if (req.params.id) {
+//         Profile.findById(req.params.id).then(function (profile) {
+//             if (!profile) {
+//                 return res.json({profile: req.profile.toJSONFor(false)});
+//             }
+//             return res.json({profile: profile});
+//         }).catch(function () {
+//             return res.sendStatus(404)
+//         });
+//     } else {
+//         return res.sendStatus(404);
+//     }
+// });
 
 router.post('/profile', function(req, res, next){
     var profile = new ProfileModel(req.body);
