@@ -1,6 +1,7 @@
 var router = require('express').Router();
 var mongoose = require('mongoose');
 var request = require('request');
+var isAuthenticated = require('../middlewares/isAuthenticated');
 
 var Profile = require('../models/profile').Profile;
 var ProfileModel = mongoose.model('Profile');
@@ -52,22 +53,18 @@ router.get('/profile/location/:location', function(req, res, next){
     }
 });
 
-router.get("/profile/:id", function (req, res, next) {
-    if (req.params.id) {
-        Profile.findById(req.params.id).then(function (profile) {
-            if (!profile) {
-                return res.json({profile: req.profile.toJSONFor(false)});
-            }
-            return res.json({profile: profile});
-        }).catch(function () {
-            return res.sendStatus(404)
-        });
-    } else {
-        return res.sendStatus(404);
-    }
+router.get("/profile/:id", (req, res) => {
+    Profile.findById(req.params.id).then((profile) => {
+        if (!profile) {
+            return res.json({profile: req.profile.toJSONFor(false)});
+        }
+        return res.json({profile: profile});
+    }).catch(() => {
+        return res.sendStatus(404)
+    });
 });
 
-router.post('/profile', function(req, res, next){
+router.post('/profile', isAuthenticated, (req, res) => {
     var profile = new ProfileModel(req.body);
 
     profile.save().then(function(prof){
@@ -87,7 +84,7 @@ router.post('/profile', function(req, res, next){
     }).catch(next);
 });
 
-router.put('/profile/:id', function(req, res, next){
+router.put('/profile/:id', isAuthenticated, function(req, res, next){
 
     Profile.findByIdAndUpdate({_id: req.params.id}, req.body, {new: true},  function(err, prof) {
         if (err) {
