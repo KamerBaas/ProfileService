@@ -60,7 +60,7 @@ router.get("/profile/:id", (req, res) => {
         }
         return res.json({profile: profile});
     }).catch(() => {
-        return res.sendStatus(404) 
+        return res.sendStatus(404)
     });
 });
 
