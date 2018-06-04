@@ -8,6 +8,7 @@ var ProfileModel = mongoose.model('Profile');
 
 
 
+
 // // Preload user profile on routes with ':username'
 // router.param('id', function(req, res, next, id){
 //
@@ -53,53 +54,6 @@ router.get('/profile/location/:location', function(req, res, next){
     }
 });
 
-<<<<<<< HEAD
-router.get("/profile/:id", function (req, res, next) {
-
-    if(req.params.idtoken === req.params.id) { //User visiting his own profile
-        //TODO: Send idtoken to auth service
-        if(true/*returned answer of auth == true*/) {
-            return getProfile(req, res);
-        }
-        else {
-            res.sendStatus(401);
-        }
-    }
-
-    return getProfile(req, res);
-    
-});
-
-function getProfile(req, res) {
-    if (req.params.id) {
-        Profile.findById(req.params.id).then(function (profile) {
-            if (!profile) {
-                return res.json({profile: req.profile.toJSONFor(false)});
-            }
-            return res.json({profile: profile});
-        }).catch(function () {
-            return res.sendStatus(404)
-        });
-    } else {
-        return res.sendStatus(404);
-    }
-}
-
-// router.get("/profile/:id", function (req, res, next) {
-//     if (req.params.id) {
-//         Profile.findById(req.params.id).then(function (profile) {
-//             if (!profile) {
-//                 return res.json({profile: req.profile.toJSONFor(false)});
-//             }
-//             return res.json({profile: profile});
-//         }).catch(function () {
-//             return res.sendStatus(404)
-//         });
-//     } else {
-//         return res.sendStatus(404);
-//     }
-// });
-=======
 router.get("/profile/:id", (req, res) => {
     Profile.findById(req.params.id).then((profile) => {
         if (!profile) {
@@ -110,7 +64,6 @@ router.get("/profile/:id", (req, res) => {
         return res.sendStatus(404)
     });
 });
->>>>>>> ad138856568141a85dab4088418395e8137b2618
 
 router.post('/profile', isAuthenticated, (req, res) => {
     var profile = new ProfileModel(req.body);

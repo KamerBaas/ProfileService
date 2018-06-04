@@ -1,0 +1,136 @@
+{
+	"info": {
+		"_postman_id": "20f6bef5-fec5-4b48-8b04-6923ef500e36",
+		"name": "Profile Service",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "GET Profiles",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "localhost/profile",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"profile"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET Profiles by Location",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "localhost/profile",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"profile"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET Renter Profiles",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "localhost/profile/renter",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"profile",
+						"renter"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get render By ID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "localhost/profile/5ac4adb9c19b5b009530755d",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"profile",
+						"5ac4adb9c19b5b009530755d"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Edit Profile",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "    {\n        \"name\": \"Name is nothing\",\n        \"titel\": \"Titel3\",\n        \"description\": \"Description\",\n        \"gender\": \"male\",\n        \"dateOfBirth\": null,\n        \"spokenLanguages\": null,\n        \"livesInCountry\": \"Spain\",\n        \"residence\": \"Arnhem\",\n        \"status\": null,\n        \"smokeInHouse\": false,\n        \"studentenVereniging\": false,\n        \"educationLevel\": null,\n        \"roomSize\": 20\n    }"
+				},
+				"url": {
+					"raw": "localhost/profile/5acb2308916ad202756fb8c8",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"profile",
+						"5acb2308916ad202756fb8c8"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Save Profile",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "    {\n    \t\"isLandlord\": true,\n        \"name\": \"Voornaam Achternaam\",\n        \"titel\": \"Titel van het profiel\",\n        \"description\": \"Description\",\n        \"gender\": \"male\",\n        \"dateOfBirth\": null,\n        \"spokenLanguages\": null,\n        \"livesInCountry\": \"Spain\",\n        \"residence\": null,\n        \"status\": null,\n        \"smokeInHouse\": false,\n        \"studentenVereniging\": false,\n        \"educationLevel\": null,\n        \"roomSize\": 20,\n        \"location\": \"Arnhem\"\n    }"
+				},
+				"url": {
+					"raw": "localhost/profile",
+					"host": [
+						"localhost"
+					],
+					"path": [
+						"profile"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
