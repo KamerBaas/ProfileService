@@ -2,9 +2,16 @@ var router = require('express').Router();
 var mongoose = require('mongoose');
 var request = require('request');
 var isAuthenticated = require('../middlewares/isAuthenticated');
+const algoliasearch = require('algoliasearch');
 
 var Profile = require('../models/profile').Profile;
 var ProfileModel = mongoose.model('Profile');
+
+const client = algoliasearch('8HYBSNX4Q5', '5d225d11ef765b21fb13bc97688801ef');
+
+//  var express = require("express");
+
+//  var app = express();
 
 
 
@@ -53,53 +60,6 @@ router.get('/profile/location/:location', function(req, res, next){
     }
 });
 
-<<<<<<< HEAD
-router.get("/profile/:id", function (req, res, next) {
-
-    if(req.params.idtoken === req.params.id) { //User visiting his own profile
-        //TODO: Send idtoken to auth service
-        if(true/*returned answer of auth == true*/) {
-            return getProfile(req, res);
-        }
-        else {
-            res.sendStatus(401);
-        }
-    }
-
-    return getProfile(req, res);
-    
-});
-
-function getProfile(req, res) {
-    if (req.params.id) {
-        Profile.findById(req.params.id).then(function (profile) {
-            if (!profile) {
-                return res.json({profile: req.profile.toJSONFor(false)});
-            }
-            return res.json({profile: profile});
-        }).catch(function () {
-            return res.sendStatus(404)
-        });
-    } else {
-        return res.sendStatus(404);
-    }
-}
-
-// router.get("/profile/:id", function (req, res, next) {
-//     if (req.params.id) {
-//         Profile.findById(req.params.id).then(function (profile) {
-//             if (!profile) {
-//                 return res.json({profile: req.profile.toJSONFor(false)});
-//             }
-//             return res.json({profile: profile});
-//         }).catch(function () {
-//             return res.sendStatus(404)
-//         });
-//     } else {
-//         return res.sendStatus(404);
-//     }
-// });
-=======
 router.get("/profile/:id", (req, res) => {
     Profile.findById(req.params.id).then((profile) => {
         if (!profile) {
@@ -107,32 +67,53 @@ router.get("/profile/:id", (req, res) => {
         }
         return res.json({profile: profile});
     }).catch(() => {
-        return res.sendStatus(404)
+        return res.sendStatus(404);
     });
 });
->>>>>>> ad138856568141a85dab4088418395e8137b2618
 
-router.post('/profile', isAuthenticated, (req, res) => {
-    var profile = new ProfileModel(req.body);
+router.use(function (req, res, next) {
+    console.log('Using middleware');
+    isAuthenticated(req, res, next);
+  });
 
-    profile.save().then(function(prof){
+router.post('/profile', (req, res, next) => {
+    console.log(req.body);
+    var profile = new ProfileModel({id: req.body.userid});
 
-        var profi = req.body;
-        profi.objectID = prof._id;
+    //profile._id = req.body.userid;
 
-        console.log(profi);
-        //console.log({profile :profi});
+    console.log(profile);
 
-        request.post({ url: 'http://gateway.kamerbaas.nl/profile/', json: {profile: profi}}, function optionalCallback(err, httpResponse, body) {
-            if (err) { return console.error('upload failed:', err);}
-            console.log('Upload successful!  Server responded with:', body);
+    client.initIndex('profiles').addObject({
+        objectID: profile.id,
+        name: profile.name,
+        gender: 'male'
+    }, function(err, content) {
+        console.log('objectID=' + content.objectID);
+        client.initIndex('profiles').getObject(profile.id, (err, content) => {
+            console.log(content);
         });
+    });
 
-        return res.json({saved: true});
-    }).catch(next);
+    return res.json({saved: true, user: profile});
+    // profile.save().then(function(prof){
+
+    //     var profi = req.body;
+    //     profi.objectID = prof._id;
+
+    //     console.log(profi);
+    //     //console.log({profile :profi});
+
+    //     request.post({ url: 'http://gateway.kamerbaas.nl/profile/', json: {profile: profi}}, function optionalCallback(err, httpResponse, body) {
+    //         if (err) { return console.error('upload failed:', err);}
+    //         console.log('Upload successful!  Server responded with:', body);
+    //     });
+
+    //     return res.json({saved: true});
+    //}).catch(next);
 });
 
-router.put('/profile/:id', isAuthenticated, function(req, res, next){
+router.put('/profile/:id', function(req, res, next){
 
     Profile.findByIdAndUpdate({_id: req.params.id}, req.body, {new: true},  function(err, prof) {
         if (err) {

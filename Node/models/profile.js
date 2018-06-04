@@ -13,6 +13,7 @@ const Schema = mongoose.Schema;
  */
 
 const ProfileSchema = new Schema({
+    id: { type: String, required: true },
     isLandlord: { type: Boolean, default: false},
     name: { type: String, default: '' },
     title: { type: String, default: ''},
@@ -36,7 +37,7 @@ const ProfileSchema = new Schema({
 ProfileSchema.methods = {
     toJSONFor: function (profile) {
         return {
-            objectID: profile._id,
+            objectID: profile.id,
             isLandlord: profile.isLandlord,
             name: profile.name,
             title: profile.title,

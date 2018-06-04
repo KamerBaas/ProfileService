@@ -14,9 +14,7 @@ app.use(bodyParser.json());
 //DB setup
 mongoose.connect("mongodb://mongo:27017");
 
-
 app.use(require('./api/profile'));
-
 
 app.get('/ping', function(req, res){
   res.send("Hello");
