@@ -29,15 +29,15 @@ const client = algoliasearch('8HYBSNX4Q5', '5d225d11ef765b21fb13bc97688801ef');
 //     }).catch(next);
 // });
 
-router.get('/profile', function(req, res, next){
-    console.log("Profile GET");
+// router.get('/profile', function(req, res, next){
+//     console.log("Profile GET");
 
-    Profile.find().then(function(profile){
-        if(!profile){ return res.send("Nothing"); }
+//     Profile.find().then(function(profile){
+//         if(!profile){ return res.send("Nothing"); }
 
-        return res.json(profile);
-    }).catch(next);
-});
+//         return res.json(profile);
+//     }).catch(next);
+// });
 
 router.get('/profile/renter', function(req, res, next){
     Profile.find({isLandlord: false}).then(function(profile){
@@ -60,57 +60,43 @@ router.get('/profile/location/:location', function(req, res, next){
     }
 });
 
-router.get("/profile/:id", (req, res) => {
-    Profile.findById(req.params.id).then((profile) => {
-        if (!profile) {
-            return res.json({profile: req.profile.toJSONFor(false)});
-        }
-        return res.json({profile: profile});
-    }).catch(() => {
-        return res.sendStatus(404);
+router.use(function (req, res, next) {
+    isAuthenticated(req, res, next);
+});
+
+router.get("/profile/:id", (req, res, next) => {
+    client.initIndex('profiles').getObject(req.params.id, (err, content) => {
+        return res.json({ profile: content} );
     });
 });
 
-router.use(function (req, res, next) {
-    console.log('Using middleware');
-    isAuthenticated(req, res, next);
-  });
+router.post('/profile/:id', (req, res, next) => {
+    var profile = new ProfileModel(req.body);
 
-router.post('/profile', (req, res, next) => {
-    console.log(req.body);
-    var profile = new ProfileModel({id: req.body.userid});
+    profile.objectID = req.params.id;
 
-    //profile._id = req.body.userid;
-
-    console.log(profile);
-
-    client.initIndex('profiles').addObject({
-        objectID: profile.id,
+    client.initIndex('profiles').saveObject({
+        objectID: profile.objectID,
         name: profile.name,
-        gender: 'male'
+        title: profile.object,
+        description: profile.description,
+        gender: profile.gender,
+        dateOfBirth: profile.dateOfBirth,
+        spokenLanguages: profile.spokenLanguages,
+        livesInCountry: profile.livesInCountry,
+        residence: profile.residence,
+        status: profile.status,
+        smokeInHouse: profile.smokeInHouse,
+        studentenVereniging: profile.studentenVereniging,
+        educationLevel: profile.educationLevel
     }, function(err, content) {
-        console.log('objectID=' + content.objectID);
-        client.initIndex('profiles').getObject(profile.id, (err, content) => {
+        console.log(content);
+        client.initIndex('profiles').getObject(profile.objectID, (err, content) => {
             console.log(content);
         });
     });
 
     return res.json({saved: true, user: profile});
-    // profile.save().then(function(prof){
-
-    //     var profi = req.body;
-    //     profi.objectID = prof._id;
-
-    //     console.log(profi);
-    //     //console.log({profile :profi});
-
-    //     request.post({ url: 'http://gateway.kamerbaas.nl/profile/', json: {profile: profi}}, function optionalCallback(err, httpResponse, body) {
-    //         if (err) { return console.error('upload failed:', err);}
-    //         console.log('Upload successful!  Server responded with:', body);
-    //     });
-
-    //     return res.json({saved: true});
-    //}).catch(next);
 });
 
 router.put('/profile/:id', function(req, res, next){

@@ -13,7 +13,7 @@ const Schema = mongoose.Schema;
  */
 
 const ProfileSchema = new Schema({
-    id: { type: String, required: true },
+    objectID: { type: String, required: true },
     isLandlord: { type: Boolean, default: false},
     name: { type: String, default: '' },
     title: { type: String, default: ''},
