@@ -65,6 +65,7 @@ router.use(function (req, res, next) {
 });
 
 router.get("/profile/:id", (req, res, next) => {
+    console.log('getting: ' + req.params.id);
     client.initIndex('profiles').getObject(req.params.id, (err, content) => {
         return res.json({ profile: content} );
     });
