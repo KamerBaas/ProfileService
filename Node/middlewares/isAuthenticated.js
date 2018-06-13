@@ -5,7 +5,7 @@ module.exports = function(req, res, next) {
         url: 'http://kb-auth/handler.php',
         headers: { 'content-type': 'application/json' }, 
         mode: 'cors', 
-        body: JSON.stringify(req.query.idtoken)
+        body: JSON.stringify({idtoken: req.query.idtoken})
     }, (err, response, body) => {
         if(err){
             return res.status(500).send(err.message);
