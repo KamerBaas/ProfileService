@@ -1,4 +1,4 @@
-require('@google-cloud/trace-agent').start();
+// require('@google-cloud/trace-agent').start();
 
 var express = require('express');
 var mongoose = require('mongoose');
@@ -12,7 +12,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 //DB setup
-mongoose.connect("mongodb://mongo:27017");
 
 app.use(require('./api/profile'));
 
