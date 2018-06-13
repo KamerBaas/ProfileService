@@ -2,7 +2,7 @@ var request = require('request');
 
 module.exports = function(req, res, next) {
     request.post({
-        url: 'http://192.168.99.100:8081/handler.php',
+        url: 'http://kb-auth/handler.php',
         headers: { 'content-type': 'application/json' }, 
         mode: 'cors', 
         body: JSON.stringify(req.query.idtoken)
