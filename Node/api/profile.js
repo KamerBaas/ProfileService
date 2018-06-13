@@ -60,14 +60,14 @@ router.get('/profile/location/:location', function(req, res, next){
     }
 });
 
-router.use(function (req, res, next) {
-    isAuthenticated(req, res, next);
-});
+// router.use((req, res, next) => {
+//     isAuthenticated(req, res, next);
+// });
 
-router.get("/profile/:id", (req, res, next) => {
+router.get("/profile/:id", isAuthenticated, (req, res) => {
     console.log('getting: ' + req.params.id);
     client.initIndex('profiles').getObject(req.params.id, (err, content) => {
-        return res.json({ profile: content} );
+        res.json({ profile: content} );
     });
 });
 
